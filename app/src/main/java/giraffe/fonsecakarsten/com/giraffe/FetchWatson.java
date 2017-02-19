@@ -1,6 +1,7 @@
 package giraffe.fonsecakarsten.com.giraffe;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
@@ -16,21 +17,24 @@ import java.net.URL;
 
 public class FetchWatson extends AsyncTask<URL, Integer, Long> {
 
-    //private Context context;
+    private Context context;
+    private String path;
 
-    FetchWatson(Context current) {
-        //this.context = current;
+    FetchWatson(Context current, String realpath) {
+        this.context = current;
+        this.path = realpath;
     }
 
     @Override
     protected Long doInBackground(URL... params) {
         VisualRecognition service = new VisualRecognition(VisualRecognition.VERSION_DATE_2016_05_20);
-        service.setApiKey("{bd8ca3f2243490e58d837849484862d2ba777df6}");
+        service.setApiKey("bd8ca3f2243490e58d837849484862d2ba777df6");
 
-        File f = new File("src/main/res/mipmap/ic_launcher.png");
+        Uri uriFromPath = Uri.fromFile(new File(path));
 
+        System.out.println(path);
         ClassifyImagesOptions options = new ClassifyImagesOptions.Builder()
-                .images(new File("src/main/res/mipmap/ic_launcher.png"))
+                .images(new File(uriFromPath.getPath()))
                 .build();
         VisualClassification result = service.classify(options).execute();
         System.out.println(result);
