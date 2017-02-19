@@ -3,7 +3,6 @@ package giraffe.fonsecakarsten.com.giraffe;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -20,12 +19,12 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView txtSDK;
-    Button btnSelectImage, btnSelectImage2;
-    TextView txtUriPath, txtRealPath;
-    ImageView imageView;
-    String state = Environment.getExternalStorageState();
-    ArrayList<String> tags;
+    private Button btnSelectImage;
+    private Button btnSelectImage2;
+    private ImageView imageView;
+    //String state = Environment.getExternalStorageState();
+    private ArrayList<String> tags;
+    private TextView mText;
     private SpeechRecognizer sr;
 
 
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSelectImage = (Button) findViewById(R.id.btnSelectImage);
         btnSelectImage2 = (Button) findViewById(R.id.btnSelectImage2);
         imageView = (ImageView) findViewById(R.id.imgView);
-        TextView mText = (TextView) findViewById(R.id.printText);
+        mText = (TextView) findViewById(R.id.printText);
 
         // add click listener to button
         btnSelectImage.setOnClickListener(this);
@@ -77,15 +76,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private boolean isMediaAvailable() {
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+//    private boolean isMediaAvailable() {
+//
+//        if (Environment.MEDIA_MOUNTED.equals(state)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+//
 //    public void tags() {
 //
 //        if (!isMediaAvailable()) {
@@ -117,20 +116,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int reqCode, int resCode, Intent data) {
         if (resCode == Activity.RESULT_OK && data != null) {
-
             String realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
             FetchWatson task = new FetchWatson(this, realPath);
             try {
                 tags = task.execute().get();
+                imageView.setImageURI(data.getData());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-            imageView.setImageURI(data.getData());
-
         }
     }
 
-    class listener implements RecognitionListener {
+    private class listener implements RecognitionListener {
         public void onReadyForSpeech(Bundle params) {
             //Log.d(TAG, "onReadyForSpeech");
         }
@@ -164,17 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //Log.d(TAG, "result " + data.get(i));
                 str += data.get(i);
             }
-            System.out.println(str);
-
-            String[] tag2 = String.valueOf(data.size()).split(" ");
-            //mText.setText("results: " + String.valueOf(data.size()));
-            if (tag2.length != 0) {
-                for (int i = 0; i < tag2.length; i++) {
-//                    if (tags.contains(tag2[0])) {
-//
-//                    }
-                }
-            }
+            mText.setText("results: " + String.valueOf(data.size()));
         }
 
         public void onPartialResults(Bundle partialResults) {
