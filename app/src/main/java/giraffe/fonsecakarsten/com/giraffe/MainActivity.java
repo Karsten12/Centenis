@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.gun0912.tedpermission.PermissionListener;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView imageView;
     private ArrayList<String> tags;
     private EditText mText;
-    PermissionListener permissionlistener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
