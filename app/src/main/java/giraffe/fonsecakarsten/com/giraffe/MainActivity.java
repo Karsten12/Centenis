@@ -3,30 +3,25 @@ package giraffe.fonsecakarsten.com.giraffe;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button btnSelectImage;
-    private Button btnSelectImage2;
     private ImageView imageView;
-    //String state = Environment.getExternalStorageState();
     private ArrayList<String> tags;
-    private TextView mText;
-    private SpeechRecognizer sr;
-
+    private EditText mText;
+    //String state = Environment.getExternalStorageState();
+    //private SpeechRecognizer sr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +30,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnSelectImage = (Button) findViewById(R.id.btnSelectImage);
-        btnSelectImage2 = (Button) findViewById(R.id.btnSelectImage2);
+        Button btnSelectImage = (Button) findViewById(R.id.btnSelectImage);
+        Button btnSelectImage2 = (Button) findViewById(R.id.btnSelectImage2);
         imageView = (ImageView) findViewById(R.id.imgView);
-        mText = (TextView) findViewById(R.id.printText);
+        mText = (EditText) findViewById(R.id.insertText);
+//        sr = SpeechRecognizer.createSpeechRecognizer(this);
+//        sr.setRecognitionListener(new listener());
 
-        // add click listener to button
         btnSelectImage.setOnClickListener(this);
         btnSelectImage2.setOnClickListener(this);
-        sr = SpeechRecognizer.createSpeechRecognizer(this);
-        sr.setRecognitionListener(new listener());
     }
 
     @Override
@@ -52,26 +46,64 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (view.getId()) {
             case R.id.btnSelectImage:
-                // 1. on Upload click call ACTION_GET_CONTENT intent
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                // 2. pick image only
                 intent.setType("image/*");
-                // 3. start activity
                 startActivityForResult(intent, 0);
                 break;
 
             case R.id.btnSelectImage2:
-                if (tags.size() != 0) {
-                    Intent intent1 = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    intent1.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                    intent1.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
-                    intent1.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
-                    sr.startListening(intent1);
-                    Log.i("111111", "11111111");
+                String str1 = mText.getText().toString();
+                try {
+                    getThesaurus(str1);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+//                if (tags.size() != 0) {
+//                    Intent intent1 = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+//                    intent1.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+//                    intent1.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
+//                    intent1.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
+//                    sr.startListening(intent1);
+//                    Log.i("111111", "11111111");
+//                }
                 break;
             default:
                 break;
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+        if (resCode == Activity.RESULT_OK && data != null) {
+            String realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+            FetchWatson task = new FetchWatson(realPath);
+            try {
+                tags = task.execute().get();
+                imageView.setImageURI(data.getData());
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private void getThesaurus(String word) throws IOException {
+        ArrayList<String> toReturn = new ArrayList<>();
+        String api_key = "ad74d3ccf397694429ae145c20db06cc"; // DO NOT CHANGE
+        String inter = String.format("http://words.bighugelabs.com/api/2/%s/%s/", api_key, word);
+        URL url = new URL(inter);
+        fetchThesaurus fetch2 = new fetchThesaurus(url);
+        try {
+            toReturn = fetch2.execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < toReturn.size(); i++) {
+            if (tags.contains(toReturn.get(i))) {
+                System.out.println("True");
+            }
         }
     }
 
@@ -112,65 +144,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        }
 //    }
 
-
-    @Override
-    protected void onActivityResult(int reqCode, int resCode, Intent data) {
-        if (resCode == Activity.RESULT_OK && data != null) {
-            String realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
-            FetchWatson task = new FetchWatson(this, realPath);
-            try {
-                tags = task.execute().get();
-                imageView.setImageURI(data.getData());
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private class listener implements RecognitionListener {
-        public void onReadyForSpeech(Bundle params) {
-            //Log.d(TAG, "onReadyForSpeech");
-        }
-
-        public void onBeginningOfSpeech() {
-            //Log.d(TAG, "onBeginningOfSpeech");
-        }
-
-        public void onRmsChanged(float rmsdB) {
-            //Log.d(TAG, "onRmsChanged");
-        }
-
-        public void onBufferReceived(byte[] buffer) {
-            //Log.d(TAG, "onBufferReceived");
-        }
-
-        public void onEndOfSpeech() {
-            //Log.d(TAG, "onEndofSpeech");
-        }
-
-        public void onError(int error) {
-            //Log.d(TAG, "error " + error);
-            //mText.setText("error " + error);
-        }
-
-        public void onResults(Bundle results) {
-            String str = "";
-            //Log.d(TAG, "onResults " + results);
-            ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            for (int i = 0; i < data.size(); i++) {
-                //Log.d(TAG, "result " + data.get(i));
-                str += data.get(i);
-            }
-            mText.setText("results: " + String.valueOf(data.size()));
-        }
-
-        public void onPartialResults(Bundle partialResults) {
-            //Log.d(TAG, "onPartialResults");
-        }
-
-        public void onEvent(int eventType, Bundle params) {
-            //Log.d(TAG, "onEvent " + eventType);
-        }
-    }
+//    private class listener implements RecognitionListener {
+//        public void onReadyForSpeech(Bundle params) {
+//            //Log.d(TAG, "onReadyForSpeech");
+//        }
+//
+//        public void onBeginningOfSpeech() {
+//            //Log.d(TAG, "onBeginningOfSpeech");
+//        }
+//
+//        public void onRmsChanged(float rmsdB) {
+//            //Log.d(TAG, "onRmsChanged");
+//        }
+//
+//        public void onBufferReceived(byte[] buffer) {
+//            //Log.d(TAG, "onBufferReceived");
+//        }
+//
+//        public void onEndOfSpeech() {
+//            //Log.d(TAG, "onEndofSpeech");
+//        }
+//
+//        public void onError(int error) {
+//            //Log.d(TAG, "error " + error);
+//            //mText.setText("error " + error);
+//        }
+//
+//        public void onResults(Bundle results) {
+//            String str = "";
+//            //Log.d(TAG, "onResults " + results);
+//            ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+//            for (int i = 0; i < data.size(); i++) {
+//                //Log.d(TAG, "result " + data.get(i));
+//                str += data.get(i);
+//            }
+//            mText.setText("results: " + String.valueOf(data.size()));
+//        }
+//
+//        public void onPartialResults(Bundle partialResults) {
+//            //Log.d(TAG, "onPartialResults");
+//        }
+//
+//        public void onEvent(int eventType, Bundle params) {
+//            //Log.d(TAG, "onEvent " + eventType);
+//        }
+//    }
 
 }

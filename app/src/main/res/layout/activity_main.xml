@@ -44,8 +44,10 @@
         android:layout_marginBottom="20dp"
         android:text="Select Downloads Image" />
 
-    <TextView
-        android:id="@+id/printText"
+    <EditText
+        android:id="@+id/insertText"
+        android:text="Text here"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/btnSelectImage2" />

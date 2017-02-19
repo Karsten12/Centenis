@@ -1,6 +1,5 @@
 package giraffe.fonsecakarsten.com.giraffe;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
@@ -18,13 +17,11 @@ import java.util.List;
  * Created by kfonseca on 2/18/17.
  */
 
-public class FetchWatson extends AsyncTask<URL, Integer, ArrayList<String>> {
+class FetchWatson extends AsyncTask<URL, Integer, ArrayList<String>> {
 
-    //private Context context;
     private String path;
 
-    FetchWatson(Context current, String realpath) {
-        //this.context = current;
+    FetchWatson(String realpath) {
         this.path = realpath;
     }
 
