@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,8 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView imageView;
     private ArrayList<String> tags;
     private EditText mText;
-    //String state = Environment.getExternalStorageState();
-    //private SpeechRecognizer sr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +33,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnSelectImage2 = (Button) findViewById(R.id.btnSelectImage2);
         imageView = (ImageView) findViewById(R.id.imgView);
         mText = (EditText) findViewById(R.id.insertText);
-//        sr = SpeechRecognizer.createSpeechRecognizer(this);
-//        sr.setRecognitionListener(new listener());
-
         btnSelectImage.setOnClickListener(this);
         btnSelectImage2.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.btnSelectImage:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -54,18 +49,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnSelectImage2:
                 String str1 = mText.getText().toString();
                 try {
-                    getThesaurus(str1);
+                    if (str1.length() != 0) {
+                        getThesaurus(str1);
+                    } else {
+                        Toast toast = Toast.makeText(this, "Please make sure to first choose an image and then enter a guess", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-//                if (tags.size() != 0) {
-//                    Intent intent1 = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//                    intent1.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//                    intent1.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
-//                    intent1.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
-//                    sr.startListening(intent1);
-//                    Log.i("111111", "11111111");
-//                }
                 break;
             default:
                 break;
@@ -99,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
+        // Check to see if the thesaurus returned any information close to the watson description
         for (int i = 0; i < toReturn.size(); i++) {
             if (tags.contains(toReturn.get(i))) {
                 System.out.println("True");
