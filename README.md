@@ -10,8 +10,8 @@ Compile and build using gradle and Android Studio.
 I am actively searching for a fix for this issue, but it will be fixed in the future in one way or another*
 
 Steps:
-1. Press the "Select Gallery Image" button to pick and retrieve any picture of 100 square pixels or more (size is maxed to 4mb due to IBM watson API's)
+1.) Press the "Select Gallery Image" button to pick and retrieve any picture of 100 square pixels or more (size is maxed to 4mb due to IBM watson API's)
 *ERROR OCCURS HERE ON SOME PHONE*
-2. You should now see the image on the bottom half of your screen (give it a second)
-3. Enter a "Guess" of what you think the picture depicts
-4. On the terminal you should be able to see if your guess (and it's related synonyms) are similar to watson's categories
+2.) You should now see the image on the bottom half of your screen (give it a second)
+3.) Enter a "Guess" of what you think the picture depicts
+4.) On the terminal you should be able to see if your guess (and it's related synonyms) are similar to watson's categories
