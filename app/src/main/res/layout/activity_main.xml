@@ -39,22 +39,6 @@
         android:layout_marginBottom="20dp"
         android:text="Select Image" />
 
-    <TextView
-        android:id="@+id/txtUriPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnSelectImage"
-        android:layout_marginBottom="20dp"
-        android:text="URI Path:" />
-
-    <TextView
-        android:id="@+id/txtRealPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtUriPath"
-        android:layout_marginBottom="20dp"
-        android:text="Real Path:" />
-
     <ImageView
         android:id="@+id/imgView"
         android:layout_width="match_parent"
