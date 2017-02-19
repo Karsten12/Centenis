@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -11,10 +12,10 @@
         android:id="@+id/toolbar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -25,25 +26,37 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/txtSDK"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar1" />
 
     <Button
         android:id="@+id/btnSelectImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtSDK"
+        android:layout_below="@+id/toolbar1"
         android:layout_marginBottom="20dp"
-        android:text="Select Image" />
+        android:layout_marginTop="80dp"
+        android:text="Select Gallery Image" />
+
+    <Button
+        android:id="@+id/btnSelectImage2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSelectImage"
+        android:layout_marginBottom="20dp"
+        android:text="Select Downloads Image" />
+
+    <TextView
+        android:id="@+id/printText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/btnSelectImage2" />
+
 
     <ImageView
         android:id="@+id/imgView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtRealPath" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp" />
 
 
 </RelativeLayout>
