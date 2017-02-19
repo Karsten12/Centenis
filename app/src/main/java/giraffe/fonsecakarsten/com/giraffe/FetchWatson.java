@@ -1,7 +1,6 @@
 package giraffe.fonsecakarsten.com.giraffe;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
@@ -30,15 +29,18 @@ public class FetchWatson extends AsyncTask<URL, Integer, Long> {
         VisualRecognition service = new VisualRecognition(VisualRecognition.VERSION_DATE_2016_05_20);
         service.setApiKey("bd8ca3f2243490e58d837849484862d2ba777df6");
 
-        Uri uriFromPath = Uri.fromFile(new File(path));
-
         System.out.println(path);
         ClassifyImagesOptions options = new ClassifyImagesOptions.Builder()
-                .images(new File(uriFromPath.getPath()))
+                .images(new File(path))
                 .build();
         VisualClassification result = service.classify(options).execute();
         System.out.println(result);
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Long aLong) {
+
     }
 }
 
