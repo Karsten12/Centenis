@@ -1,4 +1,4 @@
-package giraffe.fonsecakarsten.com.giraffe;
+package centenis.fonsecakarsten.com.centenis;
 
 import android.os.AsyncTask;
 
@@ -37,6 +37,7 @@ class FetchWatson extends AsyncTask<URL, Integer, ArrayList<String>> {
         List<VisualClassifier.VisualClass> idk = result.getImages().get(0).getClassifiers().get(0).getClasses();
         for (int i = 0; i < idk.size(); i++) {
             tags.add(idk.get(i).getName());
+            System.out.println(idk.get(i).getName());
         }
         return tags;
     }
