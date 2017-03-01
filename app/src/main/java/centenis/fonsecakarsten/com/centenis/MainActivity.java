@@ -1,17 +1,18 @@
 package centenis.fonsecakarsten.com.centenis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnSelectImage2:
                 String str1 = mText.getText().toString();
                 if (str1.length() != 0) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     getThesaurus(str1);
                 } else {
                     Toast toast = Toast.makeText(this, "Please make sure to first choose an image and then enter a guess", Toast.LENGTH_SHORT);
@@ -77,21 +80,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void getThesaurus(String word) {
-        ArrayList<String> relatedWords = new ArrayList<>();
-        fetchThesaurus fetchThesaurus = new fetchThesaurus(word);
+        fetchThesaurus fetchThesaurus = new fetchThesaurus(word, tags);
+        Boolean isThere = false;
         try {
-            relatedWords = fetchThesaurus.execute().get();
+            isThere = fetchThesaurus.execute().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
         // Check to see if the thesaurus returned any information close to the watson description
-        if (relatedWords.size() != 0) {
-            for (int i = 0; i < relatedWords.size(); i++) {
-                if (tags.contains(relatedWords.get(i))) {
-                    System.out.println("True");
-                }
-            }
+        if (isThere) {
+            Toast toast = Toast.makeText(this, "Guess is correct, upload another image", Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            Toast toast2 = Toast.makeText(this, "Guess is false, please try again", Toast.LENGTH_SHORT);
+            toast2.show();
         }
         // If true, display green check mark or something?
         // Move onto next picture

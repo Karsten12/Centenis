@@ -2,23 +2,24 @@ package centenis.fonsecakarsten.com.centenis;
 
 import android.os.AsyncTask;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
  * Created by kfonseca on 2/19/17.
  */
 
-class fetchThesaurus extends AsyncTask<String, Void, ArrayList<String>> {
+class fetchThesaurus extends AsyncTask<String, Void, Boolean> {
     private String word1;
+    private ArrayList<String> watson1;
 
-    public fetchThesaurus(String word) {
+    public fetchThesaurus(String word, ArrayList<String> watsonWords) {
         word1 = word;
+        watson1 = watsonWords;
     }
 
     @Override
-    protected ArrayList<String> doInBackground(String... params) {
-
+    protected Boolean doInBackground(String... params) {
+        boolean containsGuess = false;
         DatamuseQuery query1 = new DatamuseQuery();
         JSONParse json = new JSONParse();
         ArrayList<String> relatedWords = new ArrayList<>();
@@ -29,7 +30,17 @@ class fetchThesaurus extends AsyncTask<String, Void, ArrayList<String>> {
                 relatedWords.add(toReturn[i]);
             }
         }
-        return relatedWords;
+
+        if (relatedWords.size() != 0) {
+            for (int i = 0; i < relatedWords.size(); i++) {
+                if (watson1.contains(relatedWords.get(i))) {
+                    containsGuess = true;
+                }
+            }
+        }
+
+
+        return containsGuess;
     }
 }
 
