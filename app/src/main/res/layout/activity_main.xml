@@ -33,37 +33,48 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <ImageView
+            android:id="@+id/Centenis"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_below="@id/toolbar1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/ic_gft" />
+
 
         <Button
             android:id="@+id/btnSelectImage"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar1"
+            android:layout_below="@id/Centenis"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="80dp"
             android:text="Select Gallery Image" />
 
         <Button
             android:id="@+id/btnSelectImage2"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btnSelectImage"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:text="Process Guess" />
 
         <EditText
             android:id="@+id/insertText"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/btnSelectImage2"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:hint="Guess" />
 
 
         <ImageView
             android:id="@+id/imgView"
-            android:layout_width="200px"
-            android:layout_height="200px"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp" />
