@@ -3,7 +3,7 @@ Centenis (the mobile equivalent of the web app) is an app used to detect and dia
 
 To run the app:
 
-Run git clone https://github.com/calufornia/centenis-mobile.git in an appropriate directory.
+Run git clone https://github.com/Karsten12/Centenis.git in an appropriate directory.
 
 Compile and build using gradle and Android Studio.
 *There is a significant error with the android file storage that causes the application to crash on some phones. 
