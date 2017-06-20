@@ -19,5 +19,5 @@ Steps:
 
 Future features:
 1.) Ability to upload and categorize up to 20 images at any given time
-2.) Machine learning so that the user can pinpoint exactly what categories they are missing (SUPER USEFULL TO DOCTORS)
+2.) Machine learning so that the user can pinpoint exactly what categories they are missing (SUPER USEFUL TO DOCTORS)
 3.) Possibilty of using cloud based photos from popular vendors like Google Photos etc..
