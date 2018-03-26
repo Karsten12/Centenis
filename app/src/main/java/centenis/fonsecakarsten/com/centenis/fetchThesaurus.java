@@ -28,6 +28,7 @@ class fetchThesaurus extends AsyncTask<String, Void, Boolean> {
         for (int i = 0; i < wordScores.length; i++) {
             if (wordScores[i] > 50000) {
                 relatedWords.add(toReturn[i]);
+                System.out.println(toReturn[i]);
             }
         }
 
